@@ -5,12 +5,14 @@ package baseJava;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size;
 
     void clear() {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] != null) {
                 storage[i] = null;
             }
+            size = 0;
         }
     }
 
@@ -18,6 +20,7 @@ public class ArrayStorage {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = r;
+                this.size++;
                 break;
             }
         }
@@ -27,8 +30,7 @@ public class ArrayStorage {
         for (Resume resume : storage) {
             if (resume == null) {
                 break;
-            }
-            else if (uuid.equals(resume.uuid)) {
+            } else if (uuid.equals(resume.uuid)) {
                 return resume;
             }
         }
@@ -43,22 +45,22 @@ public class ArrayStorage {
                 break;
             }
         }
-        Resume[] newArr = new Resume[10000];
         int count = 0;
-        for (Resume resume : storage) {
-            if (resume != null) {
-                newArr[count] = resume;
-                count++;
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] != null) {
+                storage[count++] = storage[i];
             }
         }
-        storage = newArr;
+        while (count < storage.length) {
+            storage[count++] = null;
+        }
+        size--;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        int size = size();
         Resume[] resumes = new Resume[size];
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] != null) {
@@ -69,12 +71,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        int count = 0;
-        for (Resume resume : storage) {
-            if (resume != null) {
-                count++;
-            }
-        }
-        return count;
+        return size;
     }
 }
